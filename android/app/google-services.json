@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "457262588522",
+    "project_id": "jejunu-lost-property",
+    "storage_bucket": "jejunu-lost-property.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:457262588522:android:f3ecd56f4b0a2912bbe013",
+        "android_client_info": {
+          "package_name": "com.example.jejunu_lost_property"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpo7YIMXr1EkXviZdi8sDnN8_dYTaCYoY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
