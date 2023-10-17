@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jejunu_lost_property/main.dart';
+import 'package:jejunu_lost_property/screen/find_list_load_screen.dart';
+import 'package:jejunu_lost_property/screen/find_list_screen.dart';
 import 'package:jejunu_lost_property/screen/root_screen.dart';
 import 'package:jejunu_lost_property/component/appbar.dart';
 
@@ -43,7 +45,8 @@ class HomeScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MapScreen()), // 테스트용 네이게이션
+                        builder: (context) =>
+                            FindListLoadScreen()), // 테스트용 네이게이션
                   );
                 },
                 child: const Text(
@@ -67,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MapScreen()), // 테스트용 네이게이션
+                        builder: (context) => FindListScreen()), // 테스트용 네이게이션
                   );
                 },
                 child: const Text(

@@ -34,6 +34,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User? user = context.read<AuthService>().currentUser();
+    //print(user);
+    //print(Type);
     return MaterialApp(
       debugShowCheckedModeBanner: false, // debug banner 안보이게
       theme: ThemeData(
