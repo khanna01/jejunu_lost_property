@@ -3,7 +3,7 @@ import 'package:jejunu_lost_property/screen/home_screen.dart';
 import 'package:jejunu_lost_property/screen/map_screen.dart';
 import 'package:jejunu_lost_property/screen/setting_screen.dart';
 
-// BottomNavigationBar를 설정하는 화면 위젯
+// 하단 탭으로 위젯을 이동하기 위해 필요한 모든 위젯을 가지고 있는 기본 위젯
 class RootScreen extends StatefulWidget {
   const RootScreen({Key? key}) : super(key: key);
 
@@ -17,7 +17,6 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
     // controller 초기화
     controller = TabController(length: 3, vsync: this);
 
@@ -27,6 +26,7 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
 
   // 리스너로 사용할 함수
   tabListener() {
+    // controller 속성이 변경될 때마다 화면을 다시 보여주도록 setState() 실행
     setState(() {});
   }
 
@@ -41,16 +41,16 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       body: TabBarView(
-        controller: controller, // controller 등록하여 TabBarView 조작
-        // 탭 화면을 보여줄 위젯
+        controller: controller, // controller로 TabBarView 조작
+        // 화면을 보여줄 위젯
         children: renderChildren(),
       ),
-      //탭 네이게이션 구현 매개변수
+      // 하단탭 설정
       bottomNavigationBar: renderBottomNavigation(),
     );
   }
 
-  //
+  // 화면에 보여질 위젯 리스트
   List<Widget> renderChildren() {
     return [
       // 홈 화면
@@ -62,14 +62,16 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
     ];
   }
 
+  // 하단 탭 네비게이션을 구현하는 위젯
   BottomNavigationBar renderBottomNavigation() {
     return BottomNavigationBar(
         // 탭 Icon과 Label을 모두 보이도록 설정
-        type: BottomNavigationBarType.fixed,
-        // 현재 화면에 렌더링되는 탭의 인덱스
+        //type: BottomNavigationBarType.fixed,
+        // 선택된 탭 인덱스가 현재 화면에 보여지는 탭의 인덱스와 같도록 설정
         currentIndex: controller!.index,
         onTap: (int index) {
           // 탭이 선택될 때마다 실행되는 함수
+          // 선택된 탭의 인덱스를 전달해 해당하는 화면으로 전환
           setState(() {
             controller!.animateTo(index);
           });

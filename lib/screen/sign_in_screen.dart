@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:jejunu_lost_property/screen/home_screen.dart';
 import 'package:jejunu_lost_property/component/auth_service.dart';
 import 'package:jejunu_lost_property/screen/root_screen.dart';
 import 'package:provider/provider.dart';
@@ -84,7 +83,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             );
                           },
                           onError: (err) {
-                            // 에러 발생
+                            // 스낵바로 에러 메세지 출력
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(err),
                             ));

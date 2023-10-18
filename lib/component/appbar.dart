@@ -11,21 +11,20 @@ class RenderAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      // 앱바 제목
+      // AppBar 제목
       title: Text('${title}',
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.w500,
             fontSize: 23,
           )),
-      // 앱바 배경색
+      // AppBar 배경색
       backgroundColor: Colors.grey[400],
       elevation: 4,
     );
   }
 
+  // AppBar 높이 설정
   @override
-  // TODO: implement preferredSize
-  Size get preferredSize =>
-      Size.fromHeight(kToolbarHeight); // default:kToolbarHeight
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }

@@ -70,7 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         password: passwordController.text,
                         // 회원가입 성공
                         onSuccess: () {
-                          // 회원가입 완료 메세지
+                          // 스낵바로 회원가입 완료 메세지 출력
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
                             content: Text("회원가입 완료"),
@@ -84,7 +84,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                         // 회원가입 실패
                         onError: (err) {
-                          // 에러 발생
+                          // 스낵바로 에러 메세지 출력
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(err),
                           ));

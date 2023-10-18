@@ -46,7 +46,7 @@ class FindListModel {
       'content': content
     };
   }
-
+/*
   // 현재 모델을 특정 속성만 변환해서 새로 생성
   FindListModel fromDocs(QueryDocumentSnapshot data) {
     Map<String, dynamic> info = data.data() as Map<String, dynamic>;
@@ -62,6 +62,7 @@ class FindListModel {
     );
   }
 
+
   factory FindListModel.fromDoc(QueryDocumentSnapshot data) {
     Map<String, dynamic> info = data.data() as Map<String, dynamic>;
     return FindListModel(
@@ -75,4 +76,6 @@ class FindListModel {
       content: info['content'],
     );
   }
+
+   */
 }

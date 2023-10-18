@@ -20,6 +20,7 @@ class HomeScreen extends StatelessWidget {
         appBar: RenderAppBar(
           title: '홈',
         ),
+        backgroundColor: Colors.white,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -44,9 +45,7 @@ class HomeScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            FindListLoadScreen()), // 테스트용 네이게이션
+                    MaterialPageRoute(builder: (context) => FindListScreen()),
                   );
                 },
                 child: const Text(
@@ -70,7 +69,8 @@ class HomeScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => FindListScreen()), // 테스트용 네이게이션
+                        builder: (context) =>
+                            FindListLoadScreen()), // 테스트용 네이게이션
                   );
                 },
                 child: const Text(
