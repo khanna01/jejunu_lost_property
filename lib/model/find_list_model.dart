@@ -4,6 +4,7 @@ class FindListModel {
   final String id;
   final String? userEmail;
   final String title;
+
   //final DateTime createdTime;
   final String placeAddress;
   final double latitude;
@@ -46,36 +47,4 @@ class FindListModel {
       'content': content
     };
   }
-/*
-  // 현재 모델을 특정 속성만 변환해서 새로 생성
-  FindListModel fromDocs(QueryDocumentSnapshot data) {
-    Map<String, dynamic> info = data.data() as Map<String, dynamic>;
-    return FindListModel(
-      id: info['id'],
-      userEmail: info['userEmail'],
-      title: info['title'],
-      //createdTime: info['createdTime'],
-      placeAddress: info['placeAddress'],
-      latitude: info['latitude'],
-      longitude: info['longitude'],
-      content: info['content'],
-    );
-  }
-
-
-  factory FindListModel.fromDoc(QueryDocumentSnapshot data) {
-    Map<String, dynamic> info = data.data() as Map<String, dynamic>;
-    return FindListModel(
-      id: info['id'],
-      userEmail: info['userEmail'],
-      title: info['title'],
-      //createdTime: info['createTime'],
-      placeAddress: info['placeAddress'],
-      latitude: info['latitude'],
-      longitude: info['longitude'],
-      content: info['content'],
-    );
-  }
-
-   */
 }

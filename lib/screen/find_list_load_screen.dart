@@ -20,11 +20,11 @@ class FindListLoadScreen extends StatefulWidget {
 class _FindListLoadScreenState extends State<FindListLoadScreen> {
   final GlobalKey<FormState> formKey = GlobalKey();
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController controller = TextEditingController();
+  //final TextEditingController controller = TextEditingController();
   final TextEditingController contentController = TextEditingController();
   String? title;
-  DateTime? createdTime;
-  String? placeAddress;
+  //DateTime? createdTime;
+  //String? placeAddress;
   //LatLng? placeLatLng;
   String? content = '';
 
@@ -74,7 +74,7 @@ class _FindListLoadScreenState extends State<FindListLoadScreen> {
                     onTap: () async {
                       var p = await PlacesAutocomplete.show(
                           context: context,
-                          apiKey: "AIzaSyCrZAL3EPNYEWfKT_IvPWCpnXex-OXADUA",
+                          apiKey: "",
                           mode: Mode.fullscreen,
                           language: 'kr',
                           types: [],
@@ -90,7 +90,7 @@ class _FindListLoadScreenState extends State<FindListLoadScreen> {
                           controller.text = p.description!;
                         });
                         GoogleMapsPlaces place = GoogleMapsPlaces(
-                          apiKey: "AIzaSyCrZAL3EPNYEWfKT_IvPWCpnXex-OXADUA",
+                          apiKey: "",
                           apiHeaders: await GoogleApiHeaders().getHeaders(),
                         );
                         PlacesDetailsResponse detail =
@@ -166,20 +166,10 @@ void submitInformation() async {
   // findList 모델을 파이어스토어 findlist 컬렉션 문서에 추가
   await FirebaseFirestore.instance
       .collection(
-        'findlist',
+        'findlist1',
       )
       .doc(findList.id)
       .set(findList.toJson());
-/*
-    nameController.clear();
-    controller.clear();
-    contentController.clear();
-    selectedEvent!.clear();
-    selectedDays!.clear();
-    event.clear();
-    days.clear();
-
- */
 }
 
 String? textValidator(String? val) {

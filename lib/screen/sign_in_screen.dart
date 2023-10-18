@@ -20,7 +20,6 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return Consumer<AuthService>(
       builder: (context, authService, child) {
-        //User? user = authService.currentUser();
         return Scaffold(
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +57,6 @@ class _SignInScreenState extends State<SignInScreen> {
                           hintText: "비밀번호", border: OutlineInputBorder()),
                     ),
                     const SizedBox(height: 32),
-
                     // 로그인 버튼
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -69,12 +67,6 @@ class _SignInScreenState extends State<SignInScreen> {
                           email: emailController.text,
                           password: passwordController.text,
                           onSuccess: () {
-                            // 로그인 성공 메세지
-                            /*ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text("로그인"),
-                            ));*/
-
                             // 로그인 성공하면 홈 화면으로 이동
                             Navigator.pushReplacement(
                               context,

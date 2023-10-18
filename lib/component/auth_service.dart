@@ -30,9 +30,7 @@ class AuthService extends ChangeNotifier {
         email: email,
         password: password,
       );
-
-      // 성공 함수 호출
-      onSuccess();
+      onSuccess(); // 성공 함수 호출
     } on FirebaseAuthException catch (e) {
       // Firebase Auth 에러 발생
       if (e.code == 'weak-password') {
@@ -50,7 +48,7 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-// 로그인 함수
+  // 로그인 함수
   void signIn({
     required String email, // 이메일
     required String password, // 비밀번호
@@ -72,7 +70,6 @@ class AuthService extends ChangeNotifier {
         email: email,
         password: password,
       );
-
       onSuccess(); // 성공 함수 호출
       notifyListeners(); // 로그인 상태 변경 알림
     } on FirebaseAuthException catch (e) {

@@ -56,7 +56,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 50, width: double.infinity), // 수평정렬을 위한 Sizebox
+            SizedBox(height: 50),
             Container(
               height: 120,
               width: 300,

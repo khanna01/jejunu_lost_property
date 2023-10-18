@@ -19,7 +19,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Consumer<AuthService>(
       builder: (context, authService, child) {
-        //User? user = authService.currentUser();
         return Scaffold(
             body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
