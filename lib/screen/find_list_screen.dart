@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jejunu_lost_property/component/appbar.dart';
 
 import '../model/find_list_model.dart';
-import 'detail_screen.dart';
+import 'package:jejunu_lost_property/screen/detail_screen.dart';
 
 class FindListScreen extends StatefulWidget {
   const FindListScreen({Key? key}) : super(key: key);
