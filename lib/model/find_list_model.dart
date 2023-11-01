@@ -10,6 +10,7 @@ class FindListModel {
   final double latitude;
   final double longitude;
   final String content;
+  final String? picUrl;
 
   FindListModel({
     required this.id,
@@ -20,6 +21,7 @@ class FindListModel {
     required this.latitude,
     required this.longitude,
     required this.content,
+    required this.picUrl,
   });
 
   // JSON으로부터 모델을 만드는 생성자
@@ -32,7 +34,9 @@ class FindListModel {
         placeAddress = json['placeAddress'],
         latitude = json['latitude'],
         longitude = json['longitude'],
-        content = json['content'];
+        content = json['content'],
+        picUrl = json['picUrl'];
+
 
   // 모델을 JSON으로 변환
   Map<String, dynamic> toJson() {
@@ -44,7 +48,8 @@ class FindListModel {
       'placeAddress': placeAddress,
       'latitude': latitude,
       'longitude': longitude,
-      'content': content
+      'content': content,
+      'picUrl': picUrl
     };
   }
 }

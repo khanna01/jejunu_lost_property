@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:jejunu_lost_property/component/appbar.dart';
 
 import '../model/find_list_model.dart';
-import 'package:jejunu_lost_property/screen/detail_screen.dart';
 
 class FindListScreen extends StatefulWidget {
   const FindListScreen({Key? key}) : super(key: key);
@@ -62,15 +61,7 @@ class _FindListScreenState extends State<FindListScreen> {
                             child: ListTile(
                               title: Text(findlist.title),
                               subtitle: Text(findlist.content),
-                              onTap: () {
-                                // 클릭하면 상세화면으로 이동, 현재 글 정보를 넘겨줌
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          DetailScreen(lists: findlist)),
-                                );
-                              },
+                              onTap: () {},
                             ),
                           ),
                           Divider(
