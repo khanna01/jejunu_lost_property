@@ -1,9 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:jejunu_lost_property/component/appbar.dart';
+import 'package:flutter/src/widgets/text.dart';
+import 'package:jejunu_lost_property/screen/detail_screen.dart';
 
 import '../model/find_list_model.dart';
-import 'package:jejunu_lost_property/screen/detail_screen.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:get/get.dart';
+
+import 'dart:io';
 
 class FindListScreen extends StatefulWidget {
   const FindListScreen({Key? key}) : super(key: key);
@@ -55,13 +60,25 @@ class _FindListScreenState extends State<FindListScreen> {
                     itemCount: snapshot.data!.size,
                     itemBuilder: (context, index) {
                       final findlist = findlists[index];
+
                       return Column(
                         children: [
                           SizedBox(
-                            height: 70,
+                            height: 80,
                             child: ListTile(
-                              title: Text(findlist.title),
-                              subtitle: Text(findlist.content),
+                              title: Text(
+                                findlist.title,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                              subtitle: Text(
+                                findlist.content,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                              trailing: findlist!.picUrl != null
+                                  ? Image.network(findlist!.picUrl!)
+                                  : Container(width: 0, height: 0),
                               onTap: () {
                                 // 클릭하면 상세화면으로 이동, 현재 글 정보를 넘겨줌
                                 Navigator.push(
