@@ -8,9 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:jejunu_lost_property/component/appbar.dart';
 import 'package:jejunu_lost_property/component/text_field.dart';
-import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:jejunu_lost_property/component/auth_service.dart';
 import 'package:image_picker/image_picker.dart';
@@ -32,7 +30,6 @@ class _FindListLoadScreenState extends State<FindListLoadScreen> {
   final TextEditingController addresscontroller = TextEditingController();
   final TextEditingController contentController = TextEditingController();
   String? title;
-
   //DateTime? createdTime;
   String? placeAddress;
   LatLng? placeLatLng;
@@ -44,6 +41,7 @@ class _FindListLoadScreenState extends State<FindListLoadScreen> {
   XFile? image; // 카메라로 촬영한 이미지를 저장할 변수
   List<XFile?> multiImage = []; // 갤러리에서 여러 장의 사진을 선택해서 저장할 변수
   List<XFile?> images = []; // 가져온 사진들을 보여주기 위한 변수
+  String? imageUrl;
 
   // 임시 위치
   static final LatLng currentLocation = LatLng(37, 126.92);
@@ -51,8 +49,36 @@ class _FindListLoadScreenState extends State<FindListLoadScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: RenderAppBar(
-        title: '게시물 등록',
+      appBar: AppBar(
+        // AppBar 제목
+        title: Text('글 작성',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+              fontSize: 23,
+            )),
+        // AppBar 배경색
+        backgroundColor: Colors.grey[400],
+        elevation: 4,
+        actions: [
+          // 클릭하면 글을 등록하는 등록 버튼
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: OutlinedButton(
+              onPressed: submitInformation,
+              child: Text('등록'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.black,
+                backgroundColor: Color(0xff9396a3),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Form(
@@ -145,10 +171,10 @@ class _FindListLoadScreenState extends State<FindListLoadScreen> {
                             // 초기위치 등록창이 뜨도록
                             searchingText: "검색중...",
                             // 검색중일 때 안내문
-                            selectText: "해당 위치입니다.",
                             // 위치를 선택했을 때 안내문
-                            outsideOfPickAreaText: '이 위치는 등록할 수 없습니다.',
+                            selectText: "해당 위치입니다.",
                             // 등록불가한 위치 선택시 안내문
+                            outsideOfPickAreaText: '이 위치는 등록할 수 없습니다.',
                             // 등록가능한 위치 제한 (제주대학교 주변만)
                             pickArea: CircleArea(
                               center: LatLng(33.4547583, 126.5622562),
@@ -165,6 +191,7 @@ class _FindListLoadScreenState extends State<FindListLoadScreen> {
                     height: 20.0,
                   ),
                   TextFormField(
+                    validator: textValidator,
                     controller: contentController,
                     onSaved: (String? val) {
                       content = val;
@@ -242,15 +269,6 @@ class _FindListLoadScreenState extends State<FindListLoadScreen> {
                       },
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: submitInformation,
-                    child: const Text(
-                      "글 등록",
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -264,45 +282,54 @@ class _FindListLoadScreenState extends State<FindListLoadScreen> {
   void submitInformation() async {
     User? user = AuthService().currentUser();
     String? userEmail = user?.email;
-    //DateTime now = DateTime.now();
-    Image image = Image.network("");
+    DateTime createdTime = DateTime.now();
 
+    Image image = Image.network("");
+    print("등록테스트");
     // 폼 검증
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save(); // 폼 저장
 
-      //ImagePicker _picker = ImagePicker();
-      //XFile? _pick = await _picker.pickImage(source: ImageSource.gallery);
       if (images.isNotEmpty) {
         for (int i = 0; i < images.length; i++) {
           File _file = File(images[i]!.path);
-          await FirebaseStorage.instance.ref("test").putFile(_file);
+          final imagename = Uuid().v4();
+          await FirebaseStorage.instance.ref('${imagename}').putFile(_file);
+          String FimageUrl = await FirebaseStorage.instance
+              .ref('${imagename}')
+              .getDownloadURL();
+          print(FimageUrl);
+          imageUrl = FimageUrl;
         }
       }
-      //print("등록테스트");
+
       final findList = FindListModel(
           id: Uuid().v4(),
           userEmail: userEmail,
           title: title!,
-          //createdTime: now,
+          createdTime: createdTime,
           placeAddress: placeAddress!,
           latitude: placeLatLng!.latitude,
           longitude: placeLatLng!.longitude,
-          content: '테스트',
-          picUrl: images[0]!.path);
+          content: content!,
+          picUrl: imageUrl != null ? imageUrl : null);
 
       // findList 모델을 파이어스토어 findlist 컬렉션 문서에 추가
       await FirebaseFirestore.instance
           .collection(
-            'findlist2',
+            'findlist3',
           )
           .doc(findList.id)
           .set(findList.toJson());
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => FindListScreen()),
-      );
+      // 작성했던 제목, 주소, 내용, 사진 지워지게
+      nameController.clear();
+      addresscontroller.clear();
+      contentController.clear();
+      images.clear();
+
+      // 글을 등록하면 이전 화면으로 이동
+      Navigator.of(context).pop();
     }
   }
 

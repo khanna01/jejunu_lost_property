@@ -87,7 +87,7 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-// 로그아웃 함수
+// 로그아웃 함
   void signOut() async {
     await FirebaseAuth.instance.signOut();
     notifyListeners(); // 로그인 상태 변경 알림

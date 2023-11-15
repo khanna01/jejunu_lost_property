@@ -4,7 +4,7 @@ class FindListModel {
   final String id;
   final String? userEmail;
   final String title;
-  //final DateTime createdTime;
+  final DateTime createdTime;
   final String placeAddress;
   final double latitude;
   final double longitude;
@@ -15,7 +15,7 @@ class FindListModel {
     required this.id,
     required this.userEmail,
     required this.title,
-    //required this.createdTime,
+    required this.createdTime,
     required this.placeAddress,
     required this.latitude,
     required this.longitude,
@@ -29,7 +29,7 @@ class FindListModel {
   })  : id = json['id'],
         userEmail = json['userEmail'],
         title = json['title'],
-        //createdTime = json['createdTime'],
+        createdTime = json["createdTime"].toDate(),
         placeAddress = json['placeAddress'],
         latitude = json['latitude'],
         longitude = json['longitude'],
@@ -42,7 +42,7 @@ class FindListModel {
       'id': id,
       'userEmail': userEmail,
       'title': title,
-      //'createdTime': createdTime,
+      'createdTime': createdTime,
       'placeAddress': placeAddress,
       'latitude': latitude,
       'longitude': longitude,

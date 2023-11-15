@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:jejunu_lost_property/component/appbar.dart';
 import 'package:flutter/src/widgets/text.dart';
+import 'package:intl/intl.dart';
 import 'package:jejunu_lost_property/screen/detail_screen.dart';
+import 'package:jejunu_lost_property/screen/find_list_load_screen.dart';
 
 import '../model/find_list_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 
-import 'dart:io';
+import 'find_search_screen.dart';
 
 class FindListScreen extends StatefulWidget {
   const FindListScreen({Key? key}) : super(key: key);
@@ -21,14 +22,50 @@ class _FindListScreenState extends State<FindListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: RenderAppBar(title: "잃어버린분"),
+      appBar: AppBar(
+        // AppBar 제목
+        title: Text('잃어버린분',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+              fontSize: 23,
+            )),
+        // AppBar 배경색
+        backgroundColor: Colors.grey[400],
+        elevation: 4,
+        actions: [
+          // 글 작성 화면으로 이동하는 버튼
+          IconButton(
+            icon: const Icon(Icons.edit, color: Colors.black),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FindListLoadScreen(),
+                  ));
+            },
+          ),
+          // 검색 화면으로 이동하는 버튼
+          IconButton(
+            icon: const Icon(Icons.search, color: Colors.black),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SearchScreen(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       // Stream으로 값을 받아서 화면에 보여주기 위해 StreamBuilder 사용
       body: StreamBuilder<QuerySnapshot>(
           // 파이어스토어에서 findlist 컬렉션 정보 가져오기
           // 데이터가 변경될 때마다 실시간으로 컬렉션 업데이트받기 위한 Stream 사용
           stream: FirebaseFirestore.instance
-              .collection('findlist1')
-              .orderBy('title', descending: true)
+              .collection('findlist3')
+              .orderBy('createdTime', descending: true)  // 작성시간 최신순으로 정렬
               .snapshots(),
           builder: (context, snapshot) {
             // 가져오는 동안 에러가 발생하면 보여줄 메세지 화면
@@ -41,7 +78,6 @@ class _FindListScreenState extends State<FindListScreen> {
             // 로딩 화면
             if (snapshot.connectionState == ConnectionState.waiting) {
               const CircularProgressIndicator();
-              //return Container(child: CircularProgressIndicator());
             }
 
             // 성공적으로 가져온 경우 실행
@@ -54,22 +90,66 @@ class _FindListScreenState extends State<FindListScreen> {
                         json: (e.data() as Map<String, dynamic>)),
                   )
                   .toList();
+
               return Scaffold(
                 body: ListView.builder(
                     //shrinkWrap: true,
                     itemCount: snapshot.data!.size,
                     itemBuilder: (context, index) {
                       final findlist = findlists[index];
-
+                      final findCreatedTime = DateFormat('MM/dd  HH:ss')
+                          .format(findlist.createdTime);
                       return Column(
                         children: [
                           SizedBox(
-                            height: 80,
+                            height: 70,
                             child: ListTile(
-                              title: Text(
-                                findlist.title,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
+                              title: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // 건물이 아니면 위치정보가 안보이도록
+                                  (findlist.placeAddress.contains('대한민국'))
+                                      ? Text(
+                                          '${findCreatedTime}',  // 글 작성 시간
+                                          style: TextStyle(
+                                              fontSize: 11, color: Colors.grey),
+                                        )
+                                      : Row(
+                                          children: [
+                                            Text(
+                                              '${findCreatedTime}  ∣',  // 글 작성 시간
+                                              style: TextStyle(
+                                                  fontSize: 11,
+                                                  color: Colors.grey),
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Icon(
+                                              Icons.room,
+                                              size: 12,
+                                              color: Colors.grey,
+                                            ),
+                                            Text(
+                                              findlist.placeAddress,   // 위치
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                  fontSize: 11,
+                                                  color: Colors.grey),
+                                            ),
+                                          ],
+                                        ),
+                                  Text(
+                                    findlist.title,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ],
                               ),
                               subtitle: Text(
                                 findlist.content,
