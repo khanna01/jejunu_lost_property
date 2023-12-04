@@ -74,7 +74,7 @@ class AuthService extends ChangeNotifier {
       notifyListeners(); // 로그인 상태 변경 알림
     } on FirebaseAuthException catch (e) {
       // Firebase Auth 에러 발생
-      if (e.code == 'user-not-found') {
+      if (e.code == "user-not-found") {
         onError('등록된 이메일이 아닙니다.');
       } else if (e.code == 'wrong-password') {
         onError('비밀번호가 일치하지 않습니다.');

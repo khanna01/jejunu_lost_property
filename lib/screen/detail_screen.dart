@@ -52,6 +52,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       // 작성시간
                       Text(DateFormat('yyyy/MM/dd  HH:ss')
                           .format(widget.lists.createdTime)),
+                      SizedBox(height: 5),
                       // 제목
                       Text(widget.lists.title,
                           textAlign: TextAlign.left,
@@ -61,7 +62,8 @@ class _DetailScreenState extends State<DetailScreen> {
                               color: Colors.black)),
                       SizedBox(height: 10),
                       // 건물이 아니면 위치가 보이지 않도록
-                      (widget.lists.placeAddress.contains('대한민국'))
+                      (widget.lists.placeAddress.contains('제주대학로 102') ||
+                              widget.lists.placeAddress.contains('제주시'))
                           ? Container(
                               height: 0,
                               width: 0,
@@ -72,7 +74,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                   fontSize: 15,
                                   //fontWeight: FontWeight.bold,
                                   color: Colors.black)),
-                      SizedBox(height: 10),
+                      //SizedBox(height: 10),
                       Text(widget.lists.content,
                           textAlign: TextAlign.left,
                           style: TextStyle(

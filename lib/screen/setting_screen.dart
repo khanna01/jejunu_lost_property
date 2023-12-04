@@ -5,6 +5,10 @@ import 'package:jejunu_lost_property/screen/sign_in_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
+import 'bookmark_list_screen.dart';
+import 'my_list_screen.dart';
+import 'notification_screen.dart';
+
 // 설정 화면 위젯
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -28,6 +32,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 height: 15.0,
               ),
               Container(
+                // 로그아웃
                 height: 48,
                 width: double.maxFinite,
                 child: OutlinedButton(
@@ -45,6 +50,97 @@ class _SettingScreenState extends State<SettingScreen> {
                   },
                   child: const Text(
                     "로그아웃",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ), // 로그아웃
+              Container(
+                // 프로필 편집
+                height: 48,
+                width: double.maxFinite,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                  ),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignInScreen()),
+                    );
+                  },
+                  child: const Text(
+                    "프로필 편집",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ), // 프로필 편집
+              Container(
+                // 작성한 글 목록
+                height: 48,
+                width: double.maxFinite,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyListScreen()),
+                    );
+                  },
+                  child: const Text(
+                    "작성한 글 목록",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ), // 작성한 글 목록
+              Container(
+                // 북마크 목록
+                height: 48,
+                width: double.maxFinite,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                  ),
+                  onPressed: () {
+                    // 북마크 목록 페이지로 이동
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BookMarkListScreen()),
+                    );
+                  },
+                  child: const Text(
+                    "북마크 목록",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                // 분실물 알림
+                height: 48,
+                width: double.maxFinite,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationScreen()),
+                    );
+                  },
+                  child: const Text(
+                    "분실물 알림",
                     style: TextStyle(
                       color: Colors.black,
                     ),

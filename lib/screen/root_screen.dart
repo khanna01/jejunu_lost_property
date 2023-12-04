@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jejunu_lost_property/screen/home_screen.dart';
 import 'package:jejunu_lost_property/screen/map_screen.dart';
+import 'package:jejunu_lost_property/screen/position_screen.dart';
 import 'package:jejunu_lost_property/screen/setting_screen.dart';
 
 // 하단 탭으로 위젯을 이동하기 위해 필요한 모든 위젯을 가지고 있는 기본 위젯
@@ -42,6 +43,7 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
     return Scaffold(
       body: TabBarView(
         controller: controller, // controller로 TabBarView 조작
+        physics: NeverScrollableScrollPhysics(),
         // 화면을 보여줄 위젯
         children: renderChildren(),
       ),
@@ -56,7 +58,7 @@ class _RootScreenState extends State<RootScreen> with TickerProviderStateMixin {
       // 홈 화면
       HomeScreen(),
       // 지도 화면
-      MapScreen(),
+      PositionScreen(),
       // 설정 화면
       SettingScreen(),
     ];

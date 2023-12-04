@@ -154,6 +154,7 @@ class _FindListLoadScreenState extends State<FindListLoadScreen> {
                                 placeLatLng = LatLng(lat, lng);
                               }
                             },
+                            hidePlaceDetailsWhenDraggingPin: false,
                             autocompleteLanguage: "ko",
                             // 한국어로
                             region: "kr",
