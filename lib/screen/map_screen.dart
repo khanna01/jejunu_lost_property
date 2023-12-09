@@ -1,14 +1,9 @@
 import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:jejunu_lost_property/component/appbar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:jejunu_lost_property/const/building_list.dart';
-
 import '../model/find_list_model.dart';
 import 'detail_screen.dart';
 
@@ -30,10 +25,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('findlist3')
-            //.where('placeAddress', isEqualTo: "102")
-            .snapshots(),
+        stream: FirebaseFirestore.instance.collection('getlist').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           // Stream을 가져오는 동안 에러가 나면 보여줄 화면
           if (snapshot.hasError) {
@@ -155,6 +147,7 @@ class _MapScreenState extends State<MapScreen> {
               );
             }
           } else {
+            // 위치가 없는 글이 없으면 빈 마커로 설정
             markers = {};
           }
 

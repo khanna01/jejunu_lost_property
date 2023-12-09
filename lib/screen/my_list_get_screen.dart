@@ -6,15 +6,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../model/find_list_model.dart';
 
-// 잃어버린 분 게시판에 작성한 글 목록 보여주는 화면
-class MyListScreen extends StatefulWidget {
-  const MyListScreen({Key? key}) : super(key: key);
+// 발견하신 분 게시판에 작성한 글 목록 보여주는 화면
+class MyListGetScreen extends StatefulWidget {
+  const MyListGetScreen({Key? key}) : super(key: key);
 
   @override
-  State<MyListScreen> createState() => _MyListScreenState();
+  State<MyListGetScreen> createState() => _MyListGetScreenState();
 }
 
-class _MyListScreenState extends State<MyListScreen> {
+class _MyListGetScreenState extends State<MyListGetScreen> {
   var currentUserEmail = FirebaseAuth.instance.currentUser?.email;
 
   @override
@@ -22,10 +22,10 @@ class _MyListScreenState extends State<MyListScreen> {
     return Scaffold(
       // Stream으로 값을 받아서 화면에 보여주기 위해 StreamBuilder 사용
       body: StreamBuilder<QuerySnapshot>(
-          // 파이어스토어에서 lostlist 컬렉션 정보 가져오기
+          // 파이어스토어에서 getlist 컬렉션 정보 가져오기
           // 데이터가 변경될 때마다 실시간으로 컬렉션 업데이트받기 위한 Stream 사용
           stream: FirebaseFirestore.instance
-              .collection('lostlist')
+              .collection('getlist')
               .where('userEmail', isEqualTo: currentUserEmail)
               .orderBy('createdTime', descending: true) // 작성시간 최신순으로 정렬
               .snapshots(),
@@ -40,13 +40,14 @@ class _MyListScreenState extends State<MyListScreen> {
             // 로딩 화면
             if (snapshot.connectionState == ConnectionState.waiting) {
               const CircularProgressIndicator();
+              //return Container(child: CircularProgressIndicator());
             }
 
             // 성공적으로 가져온 경우 실행
             // 컬렉션에 문서가 있는 경우
             if (snapshot!.hasData && snapshot.data!.docs.isNotEmpty) {
               // FindListModel로 데이터를 매핑하여 리스트 형태 저장
-              final lostlists = snapshot.data!.docs
+              final getlists = snapshot.data!.docs
                   .map(
                     (QueryDocumentSnapshot e) => FindListModel.fromJson(
                         json: (e.data() as Map<String, dynamic>)),
@@ -58,9 +59,9 @@ class _MyListScreenState extends State<MyListScreen> {
                     //shrinkWrap: true,
                     itemCount: snapshot.data!.size,
                     itemBuilder: (context, index) {
-                      final lostlist = lostlists[index];
+                      final getlist = getlists[index];
                       final findCreatedTime = DateFormat('MM/dd  HH:ss')
-                          .format(lostlist.createdTime);
+                          .format(getlist.createdTime);
                       return Column(
                         children: [
                           SizedBox(
@@ -71,8 +72,8 @@ class _MyListScreenState extends State<MyListScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   // 건물이 아니면 위치정보가 안보이도록
-                                  (lostlist.placeAddress.contains('대한민국') ||
-                                          lostlist.placeAddress.length == 0)
+                                  (getlist.placeAddress.contains('대한민국') ||
+                                          getlist.placeAddress.length == 0)
                                       ? Text(
                                           '${findCreatedTime}', // 글 작성 시간
                                           style: TextStyle(
@@ -95,7 +96,7 @@ class _MyListScreenState extends State<MyListScreen> {
                                               color: Colors.grey,
                                             ),
                                             Text(
-                                              lostlist.placeAddress, // 위치
+                                              getlist.placeAddress, // 위치
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,
                                               style: TextStyle(
@@ -105,7 +106,7 @@ class _MyListScreenState extends State<MyListScreen> {
                                           ],
                                         ),
                                   Text(
-                                    lostlist.title,
+                                    getlist.title,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                     style: TextStyle(
@@ -115,12 +116,12 @@ class _MyListScreenState extends State<MyListScreen> {
                                 ],
                               ),
                               subtitle: Text(
-                                lostlist.content,
+                                getlist.content,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
-                              trailing: lostlist!.picUrl != null
-                                  ? Image.network(lostlist!.picUrl!)
+                              trailing: getlist!.picUrl != null
+                                  ? Image.network(getlist!.picUrl!)
                                   : Container(width: 0, height: 0),
                               onTap: () {
                                 // 클릭하면 상세화면으로 이동, 현재 글 정보를 넘겨줌
@@ -128,7 +129,7 @@ class _MyListScreenState extends State<MyListScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          DetailScreen(lists: lostlist)),
+                                          DetailScreen(lists: getlist)),
                                 );
                               },
                             ),

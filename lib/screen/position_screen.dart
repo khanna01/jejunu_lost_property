@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:jejunu_lost_property/screen/buildings_screen.dart';
 import 'package:jejunu_lost_property/screen/map_screen.dart';
 
-import '../const/building_list.dart';
-
 class PositionScreen extends StatefulWidget {
   const PositionScreen({Key? key}) : super(key: key);
 

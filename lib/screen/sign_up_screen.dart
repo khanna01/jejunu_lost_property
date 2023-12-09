@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:jejunu_lost_property/component/auth_service.dart';
 import 'package:provider/provider.dart';
@@ -68,7 +69,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         email: emailController.text,
                         password: passwordController.text,
                         // 회원가입 성공
-                        onSuccess: () {
+                        onSuccess: () async {
+                          await FirebaseFirestore.instance
+                              .collection(
+                                'user',
+                              )
+                              .doc(emailController.text)
+                              .set({
+                            'userId': emailController.text,
+                          });
                           // 스낵바로 회원가입 완료 메세지 출력
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(

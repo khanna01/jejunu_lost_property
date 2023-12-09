@@ -1,6 +1,4 @@
-import 'dart:ffi';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,30 +9,25 @@ import 'package:image_picker/image_picker.dart';
 import 'package:jejunu_lost_property/component/text_field.dart';
 import 'package:uuid/uuid.dart';
 import 'package:jejunu_lost_property/component/auth_service.dart';
-import 'package:image_picker/image_picker.dart';
-
-import '../component/auth_service.dart';
 import '../model/find_list_model.dart';
-import 'find_list_screen.dart';
 
-class FindListLoadScreen extends StatefulWidget {
-  const FindListLoadScreen({Key? key}) : super(key: key);
+class GetListLoadScreen extends StatefulWidget {
+  const GetListLoadScreen({Key? key}) : super(key: key);
 
   @override
-  State<FindListLoadScreen> createState() => _FindListLoadScreenState();
+  State<GetListLoadScreen> createState() => _GetListLoadScreenState();
 }
 
-class _FindListLoadScreenState extends State<FindListLoadScreen> {
+class _GetListLoadScreenState extends State<GetListLoadScreen> {
   final GlobalKey<FormState> formKey = GlobalKey();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController addresscontroller = TextEditingController();
   final TextEditingController contentController = TextEditingController();
-  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
-
   String? title;
+
   //DateTime? createdTime;
-  String? placeAddress = "";
-  //LatLng? placeLatLng;
+  String? placeAddress;
+  LatLng? placeLatLng;
   String? content = '';
   PickResult? addressResult;
   String? picUrl = '';
@@ -105,24 +98,7 @@ class _FindListLoadScreenState extends State<FindListLoadScreen> {
                   ),
                   // 장소등록창
                   TextFormField(
-                    onSaved: (String? val) {
-                      placeAddress = val ?? "";
-                      print('ggggg ${placeAddress}');
-                    },
-                    //validator: validator,
-                    controller: addresscontroller,
-                    decoration: InputDecoration(
-                      label: Text('위치'),
-                      labelStyle: TextStyle(
-                        color: Colors.grey[800],
-                        fontWeight: FontWeight.w500,
-                        fontSize: 23.0,
-                      ),
-                    ),
-                    textInputAction: TextInputAction.done,
-                  ),
-                  /*TextFormField(
-                    //validator: null,
+                    validator: textValidator,
                     controller: addresscontroller,
                     decoration: InputDecoration(
                       hintText: '주소',
@@ -133,10 +109,8 @@ class _FindListLoadScreenState extends State<FindListLoadScreen> {
                       ),
                     ),
                     readOnly: true,
-                    onChanged: (String str) => print(str),
                     onSaved: (String? val) {
-                      placeAddress = val ?? "";
-                      print('ggggg ${placeAddress}');
+                      placeAddress = val;
                     },
                     onTap: () async {
                       Navigator.push(
@@ -208,7 +182,7 @@ class _FindListLoadScreenState extends State<FindListLoadScreen> {
                         ),
                       );
                     },
-                  ),*/
+                  ),
                   const SizedBox(
                     height: 20.0,
                   ),
@@ -317,34 +291,34 @@ class _FindListLoadScreenState extends State<FindListLoadScreen> {
           File _file = File(images[i]!.path);
           final imagename = Uuid().v4();
           await FirebaseStorage.instance
-              .ref('lost_list/${imagename}')
+              .ref('getlist/${imagename}')
               .putFile(_file);
           String FimageUrl = await FirebaseStorage.instance
-              .ref('lost_list/${imagename}')
+              .ref('getlist/${imagename}')
               .getDownloadURL();
           print(FimageUrl);
           imageUrl = FimageUrl;
         }
       }
 
-      final findList = FindListModel(
+      final GetList = FindListModel(
           id: Uuid().v4(),
           userEmail: userEmail,
           title: title!,
           createdTime: createdTime,
           placeAddress: placeAddress!,
-          latitude: 0,
-          longitude: 0,
+          latitude: placeLatLng!.latitude,
+          longitude: placeLatLng!.longitude,
           content: content!,
           picUrl: imageUrl != null ? imageUrl : null);
 
-      // findList 모델을 파이어스토어 findlist 컬렉션 문서에 추가
+      // GetList 모델을 파이어스토어 Getlist 컬렉션 문서에 추가
       await FirebaseFirestore.instance
           .collection(
-            'lostlist',
+            'getlist',
           )
-          .doc(findList.id)
-          .set(findList.toJson());
+          .doc(GetList.id)
+          .set(GetList.toJson());
 
       // 작성했던 제목, 주소, 내용, 사진 지워지게
       nameController.clear();
@@ -408,7 +382,8 @@ class _FindListLoadScreenState extends State<FindListLoadScreen> {
                     });
                     //() => Navigator.pop(context);
                     Navigator.pop(context);
-                  }),
+                  } // TODO 사진을 선택하고 창이 없어지도록 해야 함
+                  ),
               SimpleDialogOption(
                 child: const Text(
                   '취소',

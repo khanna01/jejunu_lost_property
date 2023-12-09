@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:jejunu_lost_property/component/appbar.dart';
 import 'package:jejunu_lost_property/component/auth_service.dart';
+import 'package:jejunu_lost_property/screen/change_profile.dart';
+import 'package:jejunu_lost_property/screen/lists_screen.dart';
 import 'package:jejunu_lost_property/screen/sign_in_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-
 import 'bookmark_list_screen.dart';
-import 'my_list_screen.dart';
 import 'notification_screen.dart';
 
 // 설정 화면 위젯
@@ -32,31 +32,6 @@ class _SettingScreenState extends State<SettingScreen> {
                 height: 15.0,
               ),
               Container(
-                // 로그아웃
-                height: 48,
-                width: double.maxFinite,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-                  ),
-                  onPressed: () {
-                    // 로그아웃
-                    context.read<AuthService>().signOut();
-                    // 로그인 페이지로 이동
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignInScreen()),
-                    );
-                  },
-                  child: const Text(
-                    "로그아웃",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ), // 로그아웃
-              Container(
                 // 프로필 편집
                 height: 48,
                 width: double.maxFinite,
@@ -65,13 +40,14 @@ class _SettingScreenState extends State<SettingScreen> {
                     padding: const EdgeInsets.only(left: 30.0, right: 30.0),
                   ),
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SignInScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => ChangeProfileScreen()),
                     );
                   },
                   child: const Text(
-                    "프로필 편집",
+                    "비밀번호 변경",
                     style: TextStyle(
                       color: Colors.black,
                     ),
@@ -89,7 +65,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MyListScreen()),
+                      MaterialPageRoute(builder: (context) => ListsScreen()),
                     );
                   },
                   child: const Text(
@@ -140,13 +116,38 @@ class _SettingScreenState extends State<SettingScreen> {
                     );
                   },
                   child: const Text(
-                    "분실물 알림",
+                    "분실물 키워드 알림 등록",
                     style: TextStyle(
                       color: Colors.black,
                     ),
                   ),
                 ),
               ),
+              Container(
+                // 로그아웃
+                height: 48,
+                width: double.maxFinite,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                  ),
+                  onPressed: () {
+                    // 로그아웃
+                    context.read<AuthService>().signOut();
+                    // 로그인 페이지로 이동
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignInScreen()),
+                    );
+                  },
+                  child: const Text(
+                    "로그아웃",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ), // 로그아웃
             ],
           ),
         ),

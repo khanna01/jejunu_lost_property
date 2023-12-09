@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-
-import 'position_screen.dart';
 import '../const/building_list.dart';
 import 'building_list_screen.dart';
 
 class BuildingsScreen extends StatefulWidget {
   const BuildingsScreen({Key? key}) : super(key: key);
-  //final FocusNode searchFocusNode;
 
   @override
   State<BuildingsScreen> createState() => _BuildingsScreenState();

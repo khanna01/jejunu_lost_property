@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:jejunu_lost_property/component/auth_service.dart';
 import 'package:jejunu_lost_property/screen/detail_screen.dart';
 import 'package:jejunu_lost_property/screen/root_screen.dart';
@@ -20,19 +22,15 @@ class BookMarkListScreen extends StatefulWidget {
 class _BookMarkListScreenState extends State<BookMarkListScreen> {
   late String uid = '';
   late final FindListModel lists;
+  var currentUserEmail = FirebaseAuth.instance.currentUser?.email;
 
   Future<void> getUid() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     uid = prefs.getString('uid') ?? '';
   }
 
-  final stream = StreamController().stream;
-  final bookmark =
-      FirebaseFirestore.instance.collection('bookmark').snapshots();
-
   @override
   Widget build(BuildContext context) {
-    //final cartProvider = Provider.of<FindListModel>(context);
     getUid();
 
     return Scaffold(
@@ -40,7 +38,8 @@ class _BookMarkListScreenState extends State<BookMarkListScreen> {
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('bookmark')
-              .orderBy('id', descending: true)
+              .where('userEmail', isEqualTo: currentUserEmail)
+              .orderBy('createdTime', descending: true) // 작성시간 최신순으로 정렬
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
@@ -52,7 +51,7 @@ class _BookMarkListScreenState extends State<BookMarkListScreen> {
               CircularProgressIndicator();
             }
             if (snapshot!.hasData && snapshot.data!.docs.isNotEmpty) {
-              final findlists = snapshot.data!.docs
+              final bookmarklists = snapshot.data!.docs
                   .map(
                     (QueryDocumentSnapshot e) => FindListModel.fromJson(
                         json: (e.data() as Map<String, dynamic>)),
@@ -64,25 +63,70 @@ class _BookMarkListScreenState extends State<BookMarkListScreen> {
                     //shrinkWrap: true,
                     itemCount: snapshot.data!.size,
                     itemBuilder: (context, index) {
-                      final findlist = findlists[index];
+                      final bookmarklist = bookmarklists[index];
+                      final findCreatedTime = DateFormat('MM/dd  HH:ss')
+                          .format(bookmarklist.createdTime);
 
                       return Column(
                         children: [
                           SizedBox(
-                            height: 80,
+                            height: 70,
                             child: ListTile(
-                              title: Text(
-                                findlist.title,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
+                              title: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // 건물이 아니면 위치정보가 안보이도록
+                                  (bookmarklist.placeAddress.contains('대한민국') ||
+                                          bookmarklist.placeAddress.length != 0)
+                                      ? Text(
+                                          '${findCreatedTime}', // 글 작성 시간
+                                          style: TextStyle(
+                                              fontSize: 11, color: Colors.grey),
+                                        )
+                                      : Row(
+                                          children: [
+                                            Text(
+                                              '${findCreatedTime}  ∣', // 글 작성 시간
+                                              style: TextStyle(
+                                                  fontSize: 11,
+                                                  color: Colors.grey),
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Icon(
+                                              Icons.room,
+                                              size: 12,
+                                              color: Colors.grey,
+                                            ),
+                                            Text(
+                                              bookmarklist.placeAddress, // 위치
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                  fontSize: 11,
+                                                  color: Colors.grey),
+                                            ),
+                                          ],
+                                        ),
+                                  Text(
+                                    bookmarklist.title,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ],
                               ),
                               subtitle: Text(
-                                findlist.content,
+                                bookmarklist.content,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
-                              trailing: findlist!.picUrl != null
-                                  ? Image.network(findlist!.picUrl!)
+                              trailing: bookmarklist!.picUrl != null
+                                  ? Image.network(bookmarklist!.picUrl!)
                                   : Container(width: 0, height: 0),
                               onTap: () {
                                 // 클릭하면 상세화면으로 이동, 현재 글 정보를 넘겨줌
@@ -90,12 +134,14 @@ class _BookMarkListScreenState extends State<BookMarkListScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          DetailScreen(lists: findlist)),
+                                          DetailScreen(lists: bookmarklist)),
                                 );
                               },
                             ),
                           ),
-                          Divider(thickness: 1.0)
+                          Divider(
+                            thickness: 1.0,
+                          )
                         ],
                       );
                     }),
@@ -104,50 +150,11 @@ class _BookMarkListScreenState extends State<BookMarkListScreen> {
               // 컬렉션에 문서가 없는 경우
               return Scaffold(
                 body: Center(
-                  child: Text("등록된 글이 없습니다."),
+                  child: Text("북마크에 추가한 글이 없습니다."),
                 ),
               );
             }
           }),
     );
-/*
-    return FutureBuilder(
-      future: cartProvider.fetchCartItemsOrCreate(uid),
-      builder: (context, snapshot) {
-        if (cartProvider.cartItems.isEmpty) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          return ListView.builder(
-            itemCount: cartProvider.cartItems.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                onTap: () {
-                  Navigator.pushNamed(context, '/detail./',
-                      arguments: DetailScreen(lists: cartProvider.cartItems as FindListModel));
-                },
-                title: Text(cartProvider.cartItems[index].title),
-                subtitle: Text(cartProvider.cartItems[index].content.toString()),
-                leading: cartProvider!.picUrl != null
-                    ? Image.network(cartProvider!.picUrl!)
-                    : SizedBox(width: 0, height: 0),
-                //SizedBox(width: 0, height: 0),
-                //Image.network(cartProvider.cartItems[index].picUrl!),
-                */ /*cartProvider.picUrl != null
-                    ? Image.network(cartProvider.cartItems[index].picUrl!)
-                    : const SizedBox(width: 0, height: 0),*/ /*
-                trailing: InkWell(
-                  onTap: () {
-                    cartProvider.removeCartItem(uid, cartProvider.cartItems[index] as FindListModel );
-                  },
-                  child: const Icon(Icons.delete),
-                ),
-              );
-            },
-          );
-        }
-      },
-    );*/
   }
 }

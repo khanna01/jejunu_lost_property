@@ -49,6 +49,8 @@ dependencies:
   get:
   intl: 0.18.1
   shared_preferences: ^2.2.2
+  firebase_messaging: ^14.1.0
+  flutter_local_notifications: ^14.0.1
 
 dev_dependencies:
   flutter_test:

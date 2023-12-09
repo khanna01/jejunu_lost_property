@@ -61,9 +61,27 @@ class _DetailScreenState extends State<DetailScreen> {
                               fontWeight: FontWeight.bold,
                               color: Colors.black)),
                       SizedBox(height: 10),
+                      // 북마크 추가 버튼
+                      InkWell(
+                        onTap: SaveBookmark,
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.add,
+                              color: Colors.grey[500],
+                            ),
+                            Text(
+                              '게시글 저장',
+                              style: TextStyle(color: Colors.grey[500]),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10),
                       // 건물이 아니면 위치가 보이지 않도록
                       (widget.lists.placeAddress.contains('제주대학로 102') ||
-                              widget.lists.placeAddress.contains('제주시'))
+                              widget.lists.placeAddress.contains('제주시') ||
+                              widget.lists.placeAddress.length == 0)
                           ? Container(
                               height: 0,
                               width: 0,
@@ -306,5 +324,28 @@ class _DetailScreenState extends State<DetailScreen> {
         .doc(deletedcommentId)
         .delete();
     setState(() {});
+  }
+
+  // 북마크 추가 함수
+  void SaveBookmark() async {
+    final findList = FindListModel(
+      id: widget.lists.id,
+      title: widget.lists.title!,
+      content: widget.lists.content,
+      createdTime: widget.lists.createdTime,
+      picUrl: widget.lists.picUrl,
+      userEmail: currentUser,
+      placeAddress: widget.lists.placeAddress,
+      latitude: widget.lists.latitude,
+      longitude: widget.lists.longitude,
+    );
+    print(widget.lists.content);
+    // findList 모델을 파이어스토어 findlist 컬렉션 문서에 추가
+    await FirebaseFirestore.instance
+        .collection(
+          'bookmark',
+        )
+        .doc(findList.id)
+        .set(findList.toJson());
   }
 }

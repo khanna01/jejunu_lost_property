@@ -24,7 +24,7 @@ class _FindListScreenState extends State<FindListScreen> {
     return Scaffold(
       appBar: AppBar(
         // AppBar 제목
-        title: Text('잃어버린분',
+        title: Text('분실물 등록',
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w500,
@@ -64,8 +64,8 @@ class _FindListScreenState extends State<FindListScreen> {
           // 파이어스토어에서 findlist 컬렉션 정보 가져오기
           // 데이터가 변경될 때마다 실시간으로 컬렉션 업데이트받기 위한 Stream 사용
           stream: FirebaseFirestore.instance
-              .collection('findlist3')
-              .orderBy('createdTime', descending: true)  // 작성시간 최신순으로 정렬
+              .collection('lostlist')
+              .orderBy('createdTime', descending: true) // 작성시간 최신순으로 정렬
               .snapshots(),
           builder: (context, snapshot) {
             // 가져오는 동안 에러가 발생하면 보여줄 메세지 화면
@@ -84,7 +84,7 @@ class _FindListScreenState extends State<FindListScreen> {
             // 컬렉션에 문서가 있는 경우
             if (snapshot!.hasData && snapshot.data!.docs.isNotEmpty) {
               // FindListModel로 데이터를 매핑하여 리스트 형태 저장
-              final findlists = snapshot.data!.docs
+              final lostlists = snapshot.data!.docs
                   .map(
                     (QueryDocumentSnapshot e) => FindListModel.fromJson(
                         json: (e.data() as Map<String, dynamic>)),
@@ -96,9 +96,9 @@ class _FindListScreenState extends State<FindListScreen> {
                     //shrinkWrap: true,
                     itemCount: snapshot.data!.size,
                     itemBuilder: (context, index) {
-                      final findlist = findlists[index];
-                      final findCreatedTime = DateFormat('MM/dd  HH:ss')
-                          .format(findlist.createdTime);
+                      final lostlist = lostlists[index];
+                      final lostCreatedTime = DateFormat('MM/dd  HH:ss')
+                          .format(lostlist.createdTime);
                       return Column(
                         children: [
                           SizedBox(
@@ -109,16 +109,17 @@ class _FindListScreenState extends State<FindListScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   // 건물이 아니면 위치정보가 안보이도록
-                                  (findlist.placeAddress.contains('대한민국'))
+                                  (lostlist.placeAddress.contains('대한민국') ||
+                                          lostlist.placeAddress.length == 0)
                                       ? Text(
-                                          '${findCreatedTime}',  // 글 작성 시간
+                                          '${lostCreatedTime}', // 글 작성 시간
                                           style: TextStyle(
                                               fontSize: 11, color: Colors.grey),
                                         )
                                       : Row(
                                           children: [
                                             Text(
-                                              '${findCreatedTime}  ∣',  // 글 작성 시간
+                                              '${lostCreatedTime}  ∣', // 글 작성 시간
                                               style: TextStyle(
                                                   fontSize: 11,
                                                   color: Colors.grey),
@@ -132,7 +133,7 @@ class _FindListScreenState extends State<FindListScreen> {
                                               color: Colors.grey,
                                             ),
                                             Text(
-                                              findlist.placeAddress,   // 위치
+                                              lostlist.placeAddress, // 위치
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,
                                               style: TextStyle(
@@ -142,7 +143,7 @@ class _FindListScreenState extends State<FindListScreen> {
                                           ],
                                         ),
                                   Text(
-                                    findlist.title,
+                                    lostlist.title,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                     style: TextStyle(
@@ -152,12 +153,12 @@ class _FindListScreenState extends State<FindListScreen> {
                                 ],
                               ),
                               subtitle: Text(
-                                findlist.content,
+                                lostlist.content,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
-                              trailing: findlist!.picUrl != null
-                                  ? Image.network(findlist!.picUrl!)
+                              trailing: lostlist!.picUrl != null
+                                  ? Image.network(lostlist!.picUrl!)
                                   : Container(width: 0, height: 0),
                               onTap: () {
                                 // 클릭하면 상세화면으로 이동, 현재 글 정보를 넘겨줌
@@ -165,7 +166,7 @@ class _FindListScreenState extends State<FindListScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          DetailScreen(lists: findlist)),
+                                          DetailScreen(lists: lostlist)),
                                 );
                               },
                             ),

@@ -22,10 +22,10 @@ class _BuildingListScreenState extends State<BuildingListScreen> {
       appBar: RenderAppBar(title: widget.buildingName),
       // Stream으로 값을 받아서 화면에 보여주기 위해 StreamBuilder 사용
       body: StreamBuilder<QuerySnapshot>(
-          // 파이어스토어에서 findlist 컬렉션 정보 가져오기
+          // 파이어스토어에서 getlist 컬렉션 정보 가져오기
           // 데이터가 변경될 때마다 실시간으로 컬렉션 업데이트받기 위한 Stream 사용
           stream: FirebaseFirestore.instance
-              .collection('findlist3')
+              .collection('getlist')
               .orderBy('createdTime', descending: true) // 작성시간 최신순으로 정렬
               .snapshots(),
           builder: (context, snapshot) {
@@ -80,7 +80,8 @@ class _BuildingListScreenState extends State<BuildingListScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   // 건물이 아니면 위치정보가 안보이도록
-                                  (building.placeAddress.contains('대한민국'))
+                                  (building.placeAddress.contains('대한민국') ||
+                                          building.placeAddress.length != 0)
                                       ? Text(
                                           '${findCreatedTime}', // 글 작성 시간
                                           style: TextStyle(
