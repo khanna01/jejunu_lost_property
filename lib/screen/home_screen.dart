@@ -47,7 +47,7 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
                 child: const Text(
-                  "분실하신 분",
+                  "분실물",
                   style: TextStyle(
                     color: Colors.black,
                   ),
@@ -71,7 +71,7 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
                 child: const Text(
-                  "발견하신 분",
+                  "습득물",
                   style: TextStyle(
                     color: Colors.black,
                   ),

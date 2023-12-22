@@ -24,7 +24,7 @@ class _FindListScreenState extends State<FindListScreen> {
     return Scaffold(
       appBar: AppBar(
         // AppBar 제목
-        title: Text('분실물 등록',
+        title: Text('분실물 목록',
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w500,

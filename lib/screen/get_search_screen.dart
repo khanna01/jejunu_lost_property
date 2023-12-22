@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/text.dart';
+import 'package:intl/intl.dart';
 import 'package:jejunu_lost_property/screen/detail_screen.dart';
 import '../model/find_list_model.dart';
 
@@ -66,16 +67,60 @@ class _SearchScreenState extends State<GetSearchScreen> {
                     itemCount: getLists.length, //snapshot.data!.size,
                     itemBuilder: (context, index) {
                       final getlist = getLists[index];
-
+                      final lostCreatedTime = DateFormat('MM/dd  HH:ss')
+                          .format(getlist.createdTime);
                       return Column(
                         children: [
                           SizedBox(
-                            height: 80,
+                            height: 70,
                             child: ListTile(
-                              title: Text(
-                                getlist.title,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
+                              title: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // 건물이 아니면 위치정보가 안보이도록
+                                  (getlist.placeAddress.contains('대한민국') ||
+                                          getlist.placeAddress.length == 0)
+                                      ? Text(
+                                          '${lostCreatedTime}', // 글 작성 시간
+                                          style: TextStyle(
+                                              fontSize: 11, color: Colors.grey),
+                                        )
+                                      : Row(
+                                          children: [
+                                            Text(
+                                              '${lostCreatedTime}  ∣', // 글 작성 시간
+                                              style: TextStyle(
+                                                  fontSize: 11,
+                                                  color: Colors.grey),
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Icon(
+                                              Icons.room,
+                                              size: 12,
+                                              color: Colors.grey,
+                                            ),
+                                            Text(
+                                              getlist.placeAddress, // 위치
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                  fontSize: 11,
+                                                  color: Colors.grey),
+                                            ),
+                                          ],
+                                        ),
+                                  Text(
+                                    getlist.title,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ],
                               ),
                               subtitle: Text(
                                 getlist.content,

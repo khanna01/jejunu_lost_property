@@ -2,15 +2,10 @@
 
 jejunu_lost_property_app
 
-## Getting Started
+## [SW융합캡스톤디자인2] 프로젝트
 
-This project is a starting point for a Flutter application.
+`학내 분실물 관리 앱`
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- 플러터
+- 파이어베이스 (Firestore Database, Authentication, Storage, Functions)
+- 안드로이드 스튜디오 (Device - Pixel 4 API 32)

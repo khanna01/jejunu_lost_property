@@ -64,7 +64,6 @@ class _BuildingListScreenState extends State<BuildingListScreen> {
               }
               return Scaffold(
                 body: ListView.builder(
-                    //shrinkWrap: true,
                     itemCount: buildinglist.length,
                     itemBuilder: (context, index) {
                       final building = buildinglist[index];
@@ -79,40 +78,30 @@ class _BuildingListScreenState extends State<BuildingListScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // 건물이 아니면 위치정보가 안보이도록
-                                  (building.placeAddress.contains('대한민국') ||
-                                          building.placeAddress.length != 0)
-                                      ? Text(
-                                          '${findCreatedTime}', // 글 작성 시간
-                                          style: TextStyle(
-                                              fontSize: 11, color: Colors.grey),
-                                        )
-                                      : Row(
-                                          children: [
-                                            Text(
-                                              '${findCreatedTime}  ∣', // 글 작성 시간
-                                              style: TextStyle(
-                                                  fontSize: 11,
-                                                  color: Colors.grey),
-                                            ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Icon(
-                                              Icons.room,
-                                              size: 12,
-                                              color: Colors.grey,
-                                            ),
-                                            Text(
-                                              building.placeAddress, // 위치
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
-                                              style: TextStyle(
-                                                  fontSize: 11,
-                                                  color: Colors.grey),
-                                            ),
-                                          ],
-                                        ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${findCreatedTime}  ∣', // 글 작성 시간
+                                        style: TextStyle(
+                                            fontSize: 11, color: Colors.grey),
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Icon(
+                                        Icons.room,
+                                        size: 12,
+                                        color: Colors.grey,
+                                      ),
+                                      Text(
+                                        widget.buildingName, // 위치
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                            fontSize: 11, color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
                                   Text(
                                     building.title,
                                     overflow: TextOverflow.ellipsis,

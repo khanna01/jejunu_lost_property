@@ -21,7 +21,7 @@ class _GetListScreenState extends State<GetListScreen> {
     return Scaffold(
       appBar: AppBar(
         // AppBar 제목
-        title: Text('습득물 등록',
+        title: Text('습득물 목록',
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w500,
